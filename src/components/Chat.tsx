@@ -38,7 +38,7 @@ const Chat = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className='p-1'>
       <form onSubmit={handleSubmit}>
         <label>Trip Advisor</label>
 
@@ -47,17 +47,17 @@ const Chat = () => {
           value={userQuery}
           onChange={(e) => setUserQuery(e.target.value)}
           placeholder='I would like some trip advise for traveling to...'
-          style={{ width: '100%', padding: '8px', marginTop: '8px' }}
+          className='mt-0.5 w-full p-0.5'
         />
 
-        <button type='submit' style={{ marginTop: '16px' }} disabled={loading}>
+        <button type='submit' className='mt-1' disabled={loading}>
           {loading ? 'Loading...' : 'Get Advice'}
         </button>
       </form>
       {error && <p className='error'>{error}</p>}
       {advice && (
-        <div style={{ marginTop: '24px' }}>
-          <h2>Advisc:</h2>
+        <div className='mt-1'>
+          <h2>Advise:</h2>
           <p>{advice}</p>
         </div>
       )}
