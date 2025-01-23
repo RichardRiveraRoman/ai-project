@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 interface UserController {
   registerUser: (req: Request, res: Response) => Promise<Response>;
   loginUser: (req: Request, res: Response) => Promise<Response>;
-  logoutUser: (req: Request, res: Response) => Response;
+  logoutUser: (req: Request, res: Response) => Promise<Response>;
 }
 
 const userController: UserController = {
@@ -118,7 +118,7 @@ const userController: UserController = {
   },
 
   // Add logout endpoint
-  logoutUser(req: Request, res: Response): Response {
+  async logoutUser(req: Request, res: Response): Promise<Response> {
     res.cookie('token', '', {
       httpOnly: true,
       expires: new Date(0),
