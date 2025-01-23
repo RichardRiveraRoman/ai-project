@@ -38,7 +38,7 @@ const Chat = () => {
   };
 
   return (
-    <div className='p-1'>
+    <div className='mt-2 flex justify-center border-2 border-blue-200 bg-slate-200 p-2 text-center text-2xl'>
       <form onSubmit={handleSubmit}>
         <label>Trip Advisor</label>
 
@@ -57,7 +57,7 @@ const Chat = () => {
       {error && <p className='error'>{error}</p>}
       {advice && (
         <div className='mt-1'>
-          <h2>Advise:</h2>
+          <h2>Advice:</h2>
           <p>{advice}</p>
         </div>
       )}
