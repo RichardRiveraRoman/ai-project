@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User, { InterfaceUser } from '../models/userModel.ts';
+import { User } from '../models/userModel';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -84,7 +84,7 @@ const userController: UserController = {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      const isMatch = await User.comparePassword(password);
+      const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid password' });
       }
@@ -118,7 +118,7 @@ const userController: UserController = {
   },
 
   // Add logout endpoint
-  async logoutUser(req: Request, res: Response): Promise<Response> {
+  async logoutUser(_req: Request, res: Response): Promise<Response> {
     res.cookie('token', '', {
       httpOnly: true,
       expires: new Date(0),
