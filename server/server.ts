@@ -3,12 +3,14 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import mongoose from 'mongoose';
-// import userRoutes from './routes/userRoutes.js';
-// import oauthRoutes from './routes/oauthRoutes.js';
+// import userRoutes from './routes/userRoutes';
+// import oauthRoutes from './routes/oauthRoutes';
 import {
   notFoundMiddleware,
   errorHandler,
-} from './middlewares/errorMiddleware.js';
+} from './middlewares/errorMiddleware';
+import { parseUserQuery } from './controllers/userQueryController';
+import { queryOpenAIChat } from './controllers/openaiController';
 
 // PORT defined in .env or defaults to 3000
 const PORT = process.env.PORT || 3000;
@@ -16,12 +18,16 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Enable CORS (Cross-Origin Resource Sharing)
+/*
 app.use(
   cors({
     origin: 'http://localhost:5173',
     credentials: true,
   }),
 );
+*/
+
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +35,11 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 // app.use('/api/user', userRoutes); // normal user signup/login
 // app.use('/api/oauth', oauthRoutes); // GitHub OAuth
+app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
+  res.status(200).json({
+    tripAdvice: res.locals.tripAdvice || 'Could not provide trip advise',
+  });
+});
 
 // 404 or “Not Found” Handler
 app.use(notFoundMiddleware);
