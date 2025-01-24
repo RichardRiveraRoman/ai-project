@@ -11,6 +11,7 @@ import {
 } from './middlewares/errorMiddleware';
 import { parseUserQuery } from './controllers/userQueryController';
 import { queryOpenAIChat } from './controllers/openaiController';
+import oauthRoutes from './routes/oauthRoutes';
 
 // PORT defined in .env or defaults to 3000
 const PORT = process.env.PORT || 3000;
@@ -18,12 +19,16 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Enable CORS (Cross-Origin Resource Sharing)
+
 app.use(
   cors({
     origin: 'http://localhost:5173',
     credentials: true,
   }),
 );
+
+
+// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
