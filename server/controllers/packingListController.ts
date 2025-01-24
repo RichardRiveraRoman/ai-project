@@ -1,47 +1,104 @@
 import { Request, Response } from 'express';
-import { User } from '../models/userModel.ts';
-import PackingList from '../models/packingListModel.ts';
+import { User } from '../models/userModel';
+import { PackingListModel } from '../models/packingListModel';
 
-interface PackingListController {
-  savePackingList: (req: Request, res: Response) => Promise<Response>;
-  getPackingList: (req: Request, res: Response) => Promise<Response>;
-}
-const packingListController: PackingListController = {
+const packingListController = {
   savePackingList: async (req: Request, res: Response): Promise<Response> => {
-    // get item & quantity from req body
-    const { item, quantity }: { item: string; quantity: number } = req.body;
-    const { userId } = req.body;
-    // mongoose.Types.ObjectId = req.user._id;
-    if (!item || !quantity) {
-      return res
-        .status(400)
-        .json({ error: 'Lacking either item name or quantity' });
+    const { userId, location, duration, items, specialConsiderations } =
+      req.body;
+
+    // Validate required fields
+    if (!location || !duration || !items || !Array.isArray(items)) {
+      return res.status(400).json({
+        error:
+          'Missing or invalid required fields. Need location, duration, and items array',
+      });
     }
+
+    // Validate location fields
+    if (
+      !location.country ||
+      !location.city ||
+      !Array.isArray(location.weatherConditions)
+    ) {
+      return res.status(400).json({
+        error: 'Location must include country, city, and weather conditions',
+      });
+    }
+
+    // Validate duration fields
+    if (!duration.startDate || !duration.endDate || !duration.totalDays) {
+      return res.status(400).json({
+        error: 'Duration must include startDate, endDate, and totalDays',
+      });
+    }
+
     try {
+      // Find user
       const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
-      const packingListItem = new PackingList({
+
+      // Create new packing list
+      const packingList = new PackingListModel({
         userId: user._id,
-        item,
-        quantity,
+        location: {
+          country: location.country,
+          city: location.city,
+          weatherConditions: location.weatherConditions,
+          localRestrictions: location.localRestrictions || [],
+          recommendedItems: location.recommendedItems || [],
+        },
+        duration: {
+          startDate: new Date(duration.startDate),
+          endDate: new Date(duration.endDate),
+          totalDays: duration.totalDays,
+        },
+        items: items.map((item) => ({
+          item: item.name,
+          quantity: item.quantity,
+          category: item.category,
+          isEssential: item.isEssential,
+          notes: item.notes,
+        })),
+        specialConsiderations: specialConsiderations || [],
+        lastUpdated: new Date(),
       });
-      await packingListItem.save();
-      // check this if it's not working
-      user.savedPackingList.push(packingListItem.id);
+
+      // Save packing list
+      await packingList.save();
+
+      // Add to user's saved packing lists
+      user.savedPackingList.push(packingList.id);
       await user.save();
+
       return res.status(201).json({
-        message: 'Item saved to packling list successfully',
-        packingList: packingListItem,
+        message: 'Packing list saved successfully',
+        packingList: packingList,
       });
     } catch (error) {
       console.error('Error saving packing list:', error);
-      return res.status(500).json({ error: 'Failed to save packing list' });
+
+      // More specific error handling
+      if (error instanceof Error) {
+        if (error.name === 'ValidationError') {
+          return res.status(400).json({
+            error: 'Validation error',
+            details: error.message,
+          });
+        }
+      }
+
+      return res.status(500).json({
+        error: 'Failed to save packing list',
+      });
     }
   },
+
   getPackingList: async (req: Request, res: Response): Promise<Response> => {
     const { userId } = req.body;
+
     try {
       const user = await User.findById(userId).populate('savedPackingList');
       if (!user) {
