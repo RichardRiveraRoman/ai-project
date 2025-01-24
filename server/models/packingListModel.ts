@@ -7,7 +7,7 @@ interface PackingListInterface extends Document {
 }
 
 const packingListSchema = new Schema<PackingListInterface>({
-  item: { type: String, required: true, unique: true },
+  item: { type: String, required: true },
   quantity: { type: Number, required: false },
   userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
 });

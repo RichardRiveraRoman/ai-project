@@ -13,7 +13,7 @@ interface UserController {
 }
 
 const userController: UserController = {
-  registerUser: async (req: Request, res: Response): Promise<Response> => {
+  async registerUser(req: Request, res: Response): Promise<Response> {
     const {
       name,
       email,
@@ -35,11 +35,11 @@ const userController: UserController = {
         return res.status(400).json({ error: 'Email is already registered' });
       }
 
-      const user = (await User.create({
+      const user = await User.create({
         name,
         email,
         password,
-      })) as InterfaceUser;
+      });
 
       // Create token
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
