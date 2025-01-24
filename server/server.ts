@@ -1,10 +1,10 @@
-import 'dotenv/config';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import express from 'express';
+import cors from 'cors';
 import mongoose from 'mongoose';
-// import userRoutes from './routes/userRoutes';
-// import oauthRoutes from './routes/oauthRoutes';
+import cookieParser from 'cookie-parser';
+import 'dotenv/config';
+import userRoutes from './routes/userRoutes';
+import oauthRoutes from './routes/oauthRoutes';
 import {
   notFoundMiddleware,
   errorHandler,
@@ -34,7 +34,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-// app.use('/api/user', userRoutes); // normal user signup/login
+app.use('/user', userRoutes);
 app.use('/api/oauth', oauthRoutes); // GitHub OAuth
 app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
   res.status(200).json({
