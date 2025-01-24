@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useOAuth from '../hooks/useOauth';
 import { Link } from 'react-router-dom';
@@ -16,6 +16,13 @@ const LoginPage = () => {
     
     const { isLoading: isOAuthLoading, githubToken } = useOAuth();
   
+    useEffect(() => {
+        if (githubToken) {
+          console.log('GitHub token detected, navigating to dashboard...');
+          navigate('/dashboard');
+        }
+      }, [githubToken, navigate]); 
+
     const handleOAuthLogin = () => {
     console.log('navigate to chat')
       window.location.assign(
