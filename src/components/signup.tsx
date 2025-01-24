@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Signup: React.FC = () => {
   //create state for form inputs
-  const [username, setUsername] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -26,21 +26,20 @@ const Signup: React.FC = () => {
     setError(null);
 
     // //create new user object
-    const newUser = {
-      username,
-      email,
-      password,
-    };
-
+   
     //send new user object to backend
     try {
-      const response = await fetch('http://localhost:3000/api/users/signup', {
+      const response = await fetch('api/user/signup', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
       });
       const data = await response.json();
       if (data.error) {
@@ -77,8 +76,8 @@ const Signup: React.FC = () => {
               type='text'
               placeholder='Enter username'
               required={true}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className='mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500'
             />
           </div>
@@ -133,7 +132,7 @@ const Signup: React.FC = () => {
         <div className='mt-4 text-center'>
           <p className='text-sm'>
             Already have an account?{' '}
-            <Link to='/login' className='text-blue-500 hover:underline'>
+            <Link to='/' className='text-blue-500 hover:underline'>
               Log in here
             </Link>
           </p>

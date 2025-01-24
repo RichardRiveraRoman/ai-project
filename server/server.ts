@@ -34,7 +34,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/user', userRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/oauth', oauthRoutes); // GitHub OAuth
 app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
   res.status(200).json({
