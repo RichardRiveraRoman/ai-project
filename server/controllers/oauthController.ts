@@ -9,7 +9,7 @@ dotenv.config();
 const CLIENT_ID = process.env.VITE_CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
-export const getAccessToken = async (req: Request, res: Response): Promise<Response> => {
+export const getAccessToken = async (req: Request, res: Response): Promise<void> => {
   try {
     // User's one time use access token
     const { code } = req.query;
@@ -28,11 +28,11 @@ export const getAccessToken = async (req: Request, res: Response): Promise<Respo
     // Log the access token response to see what GitHub returned
     console.log('Access token response from GitHub:', data);
     // Send the same data back to the client as JSON
-    return res.json(data);
+    res.json(data);
   } catch (err) {
     // Log any error that occurred during the fetch
     console.error('Error retrieving access token:', err);
-    return res.status(500).json({ error: 'Failed to fetch GitHub user data' });
+    res.status(500).json({ error: 'Failed to fetch GitHub user data' });
   }
 };
 
@@ -90,6 +90,13 @@ export const upsertUser = async (req: Request, res: Response): Promise<Response>
 
     const token = jwt.sign({ userId: user._id }, secret, {
       expiresIn: '1h',
+    });
+    
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60, // 1 hour in milliseconds
     });
 
     return res.json({

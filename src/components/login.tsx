@@ -10,13 +10,14 @@ const LoginPage = () => {
   
     // Error handling state
     const [error, setError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting, setSubmitting] = useState(false);
     // Programmatic navigation from React Router v6
     const navigate = useNavigate();
     
     const { isLoading: isOAuthLoading, githubToken } = useOAuth();
   
     const handleOAuthLogin = () => {
+    console.log('navigate to chat')
       window.location.assign(
         'https://github.com/login/oauth/authorize?client_id=' +
           import.meta.env.VITE_CLIENT_ID,
@@ -25,7 +26,7 @@ const LoginPage = () => {
   
     const handleFormSubmit = async (e: React.FormEvent) => {
       e.preventDefault(); // Prevent page refresh
-      setIsSubmitting(true);
+      setSubmitting(true);
   
       try {
         const response = await fetch('http://localhost:3000/api/user/login', {
@@ -60,7 +61,7 @@ const LoginPage = () => {
           setError('An unknown error occurred');
         }
       } finally {
-        setIsSubmitting(false);
+        setSubmitting(false);
       };
     };
 
