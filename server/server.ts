@@ -1,10 +1,10 @@
-import 'dotenv/config';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import express from 'express';
+import cors from 'cors';
 import mongoose from 'mongoose';
-// import userRoutes from './routes/userRoutes';
-// import oauthRoutes from './routes/oauthRoutes';
+import cookieParser from 'cookie-parser';
+import 'dotenv/config';
+import userRoutes from './routes/userRoutes';
+import oauthRoutes from './routes/oauthRoutes';
 import {
   notFoundMiddleware,
   errorHandler,
@@ -18,23 +18,19 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Enable CORS (Cross-Origin Resource Sharing)
-/*
 app.use(
   cors({
     origin: 'http://localhost:5173',
     credentials: true,
   }),
 );
-*/
-
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-// app.use('/api/user', userRoutes); // normal user signup/login
-// app.use('/api/oauth', oauthRoutes); // GitHub OAuth
+app.use('/user', userRoutes);
+app.use('/api/oauth', oauthRoutes); // GitHub OAuth
 app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
   res.status(200).json({
     tripAdvice: res.locals.tripAdvice || 'Could not provide trip advice',
