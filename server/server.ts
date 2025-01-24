@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use('/api/oauth', oauthRoutes); // GitHub OAuth
 app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
   res.status(200).json({
-    tripAdvice: res.locals.tripAdvice || 'Could not provide trip advise',
+    tripAdvice: res.locals.tripAdvice || 'Could not provide trip advice',
   });
 });
 
