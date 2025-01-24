@@ -1,7 +1,6 @@
 // import { Container } from 'postcss';
 import React, { useState, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import 'tailwindcss/tailwind.css';
 
 const Signup: React.FC = () => {
   //create state for form inputs
