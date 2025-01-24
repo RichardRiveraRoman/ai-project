@@ -1,35 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose';
-
-interface IPackingItem {
-  name: string;
-  quantity: number;
-  category: string;
-  isEssential: boolean;
-  notes?: string;
-}
-
-interface ILocationDetails {
-  country: string;
-  city: string;
-  weatherConditions: string[];
-  localRestrictions?: string[];
-  recommendedItems: string[];
-}
-
-interface ITripDuration {
-  startDate: Date;
-  endDate: Date;
-  totalDays: number;
-}
-
-interface IPackingList extends Document {
-  userId: mongoose.Schema.Types.ObjectId;
-  location: ILocationDetails;
-  duration: ITripDuration;
-  items: IPackingItem[];
-  lastUpdated: Date;
-  specialConsiderations?: string[];
-}
+import mongoose, { Schema } from 'mongoose';
+import { IPackingList } from '../../types/types';
 
 const packingListSchema = new Schema<IPackingList>(
   {
@@ -91,12 +61,4 @@ const PackingListModel = mongoose.model<IPackingList>(
   packingListSchema,
 );
 
-// Unsure if we will need these export interfaces
-// I will probably move to the types file so that they can be used on the front end
-export {
-  PackingListModel,
-  IPackingList,
-  IPackingItem,
-  ILocationDetails,
-  ITripDuration,
-};
+export { PackingListModel };
