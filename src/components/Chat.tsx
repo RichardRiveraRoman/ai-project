@@ -1,9 +1,5 @@
 import { useState } from 'react';
 
-type ParsedResponse = {
-  tripAdvice: string;
-};
-
 const Chat = () => {
   const [userQuery, setUserQuery] = useState('');
   const [advice, setAdvice] = useState('');
@@ -27,8 +23,8 @@ const Chat = () => {
         const parsedError: { err: string } = await response.json();
         setError(parsedError.err);
       } else {
-        const parsedResponse: ParsedResponse = await response.json();
-        setAdvice(parsedResponse.tripAdvice);
+        const { tripAdvice } = await response.json();
+        setAdvice(JSON.stringify(tripAdvice, null, 2));
       }
     } catch (err) {
       setError(`Error: ${err}`);
