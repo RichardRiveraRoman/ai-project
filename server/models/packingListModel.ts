@@ -28,7 +28,7 @@ const packingListSchema = new Schema<IPackingList>(
     },
     items: [
       {
-        item: { type: String, required: true, minlength: 2 },
+        name: { type: String, required: true, minlength: 2 },
         quantity: { type: Number, required: true, min: 1, max: 100 },
         category: {
           type: String,

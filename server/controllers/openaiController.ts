@@ -30,7 +30,7 @@ const WeatherConditionEnum = z.enum([
 ]);
 
 const PackingItem = z.object({
-  item: z.string(),
+  name: z.string(),
   quantity: z.number(),
   category: ItemCategoryEnum,
   isEssential: z.boolean(),

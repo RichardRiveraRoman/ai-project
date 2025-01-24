@@ -1,8 +1,7 @@
 import './App.css';
 import LoginPage from './components/login';
-import Dashboard from './components/Chat'
 import SignupPage from './components/signup';
-// import Chat from './components/Chat';
+import Dashboard from './components/TravelPlan';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
