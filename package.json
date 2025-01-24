@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",
+    "bcryptjs": "^2.4.3",
+    "express-validator": "^7.2.1",
     "@types/cors": "^2.8.17",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -31,6 +33,7 @@
     "@eslint/js": "^9.17.0",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^22.10.7",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
