@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 
 const secretKey = process.env.JWT_SECRET;
 
-export default function authenticate(req, res, next) {
+export default function authenticate(req:Request, res:Response, next:NextFunction) {
   try {
     // Add debug logging
     // console.log('Cookies received:', req.cookies);

@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 // app.use('/api/user', userRoutes); // normal user signup/login
-// app.use('/api/oauth', oauthRoutes); // GitHub OAuth
+app.use('/api/oauth', oauthRoutes); // GitHub OAuth
 app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
   res.status(200).json({
     tripAdvice: res.locals.tripAdvice || 'Could not provide trip advise',
@@ -45,7 +45,7 @@ app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
 // 404 or “Not Found” Handler
 app.use(notFoundMiddleware);
 app.use(errorHandler);
-app.use('/api/oauth', oauthRoutes)
+
 // MongoDB connection string from .env
 const MONGO_URI = process.env.MONGO_URI;
 if (!MONGO_URI) {
