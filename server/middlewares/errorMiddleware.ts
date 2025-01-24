@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
-import type { ServerError } from '../types/types.ts';
+import { ServerError } from '../../types/types';
 
 // 404 or “Not Found” Handler
 export const notFoundMiddleware = (
@@ -35,4 +35,3 @@ export const errorHandler: ErrorRequestHandler = (
 
   res.status(errorObj.status).json(errorObj.message);
 };
-
