@@ -84,7 +84,7 @@ const userController: UserController = {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      const isMatch = await user.comparePassword(password);
+      const isMatch = await User.comparePassword(password);
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid password' });
       }
