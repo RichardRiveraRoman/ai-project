@@ -39,6 +39,33 @@ const TravelPlan = () => {
     }
   };
 
+  const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!advice) return; // Make sure we have advice data to upload
+
+    try {
+      const response = await fetch('/api/packinglist/savePackingList', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Needed to send JWT cookies
+        body: JSON.stringify(advice),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.err || 'Error saving packing list.');
+      } else {
+        // Optional: handle success scenario
+        // e.g., setAdvice(null), show a success message, etc.
+        alert('Packing list saved successfully!');
+      }
+    } catch (err) {
+      setError(`Error: ${err}`);
+    }
+  };
+
   return (
     <div className='bg-slate-200'>
       <h1 className='text-center text-2xl font-bold'>Travel Planner</h1>
@@ -47,7 +74,7 @@ const TravelPlan = () => {
           <label>
             Talk to your travel advisor here
             <input
-              className='block w-full outline-2 px-1.5 outline-slate-400 m-2'
+              className='m-2 block w-full px-1.5 outline-2 outline-slate-400'
               type='text'
               value={userQuery}
               placeholder='Enter your query here...'
@@ -150,6 +177,14 @@ const TravelPlan = () => {
             <strong>Last Updated:</strong>{' '}
             {new Date(advice.lastUpdated).toLocaleDateString()}
           </p>
+
+          {/* Upload Button */}
+          <button
+            className='mt-4 rounded-sm bg-green-400 p-1 duration-300 ease-in-out hover:bg-green-300'
+            onClick={handleUpload}
+          >
+            Save to My Packing List
+          </button>
         </div>
       )}
     </div>

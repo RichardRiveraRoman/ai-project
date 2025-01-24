@@ -12,6 +12,7 @@ import {
 import { parseUserQuery } from './controllers/userQueryController';
 import { queryOpenAIChat } from './controllers/openaiController';
 import oauthRoutes from './routes/oauthRoutes';
+import packingListRoutes from './routes/packingListRoutes';
 
 // PORT defined in .env or defaults to 3000
 const PORT = process.env.PORT || 3000;
@@ -35,6 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/user', userRoutes);
+app.use('/api/packinglist', packingListRoutes);
 app.use('/api/oauth', oauthRoutes); // GitHub OAuth
 app.post('/api', parseUserQuery, queryOpenAIChat, (_req, res) => {
   res.status(200).json({
